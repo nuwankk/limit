@@ -1,0 +1,55 @@
+version: "3.8"
+
+services:
+  web:
+    build: .
+    restart: always
+    command: bash -c "pip install -r requirements.txt && python manage.py runserver 0.0.0.0:8000"
+    volumes:
+    #     - ./:/app
+    #     - ./media:/app/media/
+        - ./static:/app/static/
+    ports:
+        - "8000:8000"
+    depends_on:
+        - pgdb
+
+  pgdb:
+    image: postgres:latest
+    restart: always
+    container_name: pgdb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=limitless
+      - POSTGRES_USER=limitless_user
+      - POSTGRES_PASSWORD=limitless_123
+
+  nginx:
+      image: linuxserver/swag
+      restart: always
+      environment:
+          - PUID=1000
+          - PGID=1000
+          - TZ=Asia/Dubai
+          - URL=limitless-connection.com
+          - SUBDOMAINS=api
+          - VALIDATION=http
+          - ONLY_SUBDOMAINS=true
+          - STAGING=false
+      depends_on:
+          - web
+      ports:
+          - "80:80"
+          - "443:443"
+      volumes:
+          - ./nginx/nginx.conf:/config/nginx/site-confs/default
+          - ./media:/app/media
+          - lets:/config/keys/
+          - ./static:/app/static
+
+volumes:
+  postgres_data:
+  lets:

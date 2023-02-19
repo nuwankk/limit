@@ -58,9 +58,8 @@ class User(AbstractUser):
 
     workEmail = models.EmailField(**parametersForNull);
     # video = models.ManyToManyField(VideoUser, verbose_name='Видео', blank=True, null=True, related_name='detail_video')
-    # email = models.EmailField(default=None, unique=True, **parametersForNull);
+    email = models.EmailField(default=None, unique=True, **parametersForNull);
 
-    email = models.EmailField(unique=True, validators=[EmailValidator(message="Please enter a valid email address.")])
 
     workWebsite = models.URLField(**parametersForNull);
     otherWebsite = models.URLField(**parametersForNull);

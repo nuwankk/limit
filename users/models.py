@@ -52,23 +52,9 @@ class User(AbstractUser):
     # workPhone = models.CharField(max_length=300, **parametersForNull);
     # personalPhone = models.CharField(max_length=300, **parametersForNull);
 
-    workPhone = models.CharField(max_length=300, **parametersForNull, 
-        validators=[
-            RegexValidator(
-                regex=r'^\+?1?\d{9,15}$',
-                message='Field Includes White Spaces. Please Remove and save',
-                code='invalid_number'
-            ),
-        ]);
+    workPhone = models.CharField(max_length=300, **parametersForNull);
 
-    personalPhone = models.CharField(max_length=300, **parametersForNull, 
-        validators=[
-            RegexValidator(
-                regex=r'^\+?1?\d{9,15}$',
-                message='Field Includes White Spaces. Please Remove and save',
-                code='invalid_number'
-            ),
-        ]);
+    personalPhone = models.CharField(max_length=300, **parametersForNull);
 
     workEmail = models.EmailField(**parametersForNull);
     # video = models.ManyToManyField(VideoUser, verbose_name='Видео', blank=True, null=True, related_name='detail_video')
@@ -96,25 +82,9 @@ class User(AbstractUser):
     # snapchat = models.URLField(verbose_name="Snapchat", **parametersForNull);
     # tiktok = models.URLField(verbose_name="Tiktok", **parametersForNull);
     
-    snapchat = models.URLField(verbose_name="Snapchat", **parametersForNull, 
-        validators=[
-            RegexValidator(
-                regex=r'^[a-z0-9.:/\-_@]+$',
-                message='Field Includes Uppercase Letters. Please Convert to Lowercase',
-                code='invalid_lowercase'
-            ),
-        ]);
+    snapchat = models.URLField(verbose_name="Snapchat", **parametersForNull);
     
-    tiktok = models.URLField(
-        verbose_name="Tiktok",
-        **parametersForNull, 
-        validators=[
-            RegexValidator(
-                regex=r'^[a-z0-9.:/\-_@]+$',
-                message='Field Includes Uppercase Letters. Please Convert to Lowercase',
-                code='invalid_lowercase'
-            ),
-        ]);
+    tiktok = models.URLField(verbose_name="Tiktok",**parametersForNull);
 
 
 

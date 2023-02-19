@@ -13,6 +13,39 @@ class UserCreationForm(forms.ModelForm):
 
     def save(self, commit=True):
         user = super(UserCreationForm, self).save(commit=False)
+        if bool(self.cleaned_data['workPhone']):
+            user.workPhone = self.cleaned_data['workPhone'].replace(" ", "")
+
+        if bool(self.cleaned_data['personalPhone']):
+            user.personalPhone = self.cleaned_data['personalPhone'].replace(" ", "")
+
+        if bool(self.cleaned_data['whatsapp']):
+            user.whatsapp = self.cleaned_data['whatsapp'].lower();
+        
+        if bool(self.cleaned_data['instagram']):
+            user.instagram = self.cleaned_data['instagram'].lower();
+        
+        if bool(self.cleaned_data['facebook']):
+            user.facebook = self.cleaned_data['facebook'].lower();
+        
+        if bool(self.cleaned_data['linkedin']):
+            user.linkedin = self.cleaned_data['linkedin'].lower();
+        
+        if bool(self.cleaned_data['telegram']):
+            user.telegram = self.cleaned_data['telegram'].lower();
+        
+        if bool(self.cleaned_data['snapchat']):
+            user.snapchat = self.cleaned_data['snapchat'].lower();
+        
+        if bool(self.cleaned_data['tiktok']):
+            user.tiktok = self.cleaned_data['tiktok'].lower();
+        
+        if bool(self.cleaned_data['twitter']):
+            user.twitter = self.cleaned_data['twitter'].lower();
+        
+        if bool(self.cleaned_data['youtube']):
+            user.youtube = self.cleaned_data['youtube'].lower();
+        
         if bool(self.cleaned_data['email']):
             user.email = self.cleaned_data['email'];
         else:

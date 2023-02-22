@@ -31,8 +31,8 @@ class UserCreationForm(forms.ModelForm):
         if bool(self.cleaned_data['linkedin']):
             user.linkedin = self.cleaned_data['linkedin'].lower();
         
-        if bool(self.cleaned_data['telegram']):
-            user.telegram = self.cleaned_data['telegram'].lower();
+        # if bool(self.cleaned_data['telegram']):
+        #     user.telegram = self.cleaned_data['telegram'].lower();
         
         if bool(self.cleaned_data['snapchat']):
             user.snapchat = self.cleaned_data['snapchat'].lower();
@@ -43,8 +43,8 @@ class UserCreationForm(forms.ModelForm):
         if bool(self.cleaned_data['twitter']):
             user.twitter = self.cleaned_data['twitter'].lower();
         
-        if bool(self.cleaned_data['youtube']):
-            user.youtube = self.cleaned_data['youtube'].lower();
+        # if bool(self.cleaned_data['youtube']):
+        #     user.youtube = self.cleaned_data['youtube'].lower();
         
         if bool(self.cleaned_data['email']):
             user.email = self.cleaned_data['email'];

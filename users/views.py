@@ -23,7 +23,7 @@ from users.models import User, UserImage, UserVideo, SaveContactCount
 from users.serializers import (
     UserSerializer, UserCRUDSerializer, CustomTokenRefreshSerializer, UserImagesCRUDSerializer, UserVideoCRUDSerializer,
     UserImageSerializer, SendMessageSerializer,
-    UserVideoSerializer, UserAvatarFlipSerializer,
+    UserVideoSerializer, UserAvatarFlipSerializer, UserAvatar
 )
 from utils.cropImage import cropImage
 from utils.imgToBase64 import b64_image
@@ -346,3 +346,16 @@ class SaveContactCountCreateAPIView(generics.CreateAPIView):
         order = SaveContactCount.objects.filter()
         return order
 
+# added
+class UserMVS(viewsets.ModelViewSet):
+    queryset = User.objects.all();
+    permission_classes = [permissions.IsAuthenticated]
+    lookup_field = 'avatarHidden'
+
+    def update(self, request, *args, **kwargs):
+        user = request.user;
+        data = request.data.dict();
+        serializer = UserAvatar(user, data=data, context={'request': request});
+        serializer.is_valid(raise_exception=True);
+        serializer.save();
+        return Response(serializer.data);

@@ -3,7 +3,7 @@ from rest_framework_simplejwt.views import TokenRefreshView
 
 from users.views import UserMVS, UserLoginView, ResetPasswordMVS, UpdateUserAvatarView, DownloadVCF, \
     CustomTokenRefreshView, UserImageMVS, UserImagesMVS, ShowHideAvatarView, UserVideoMVS, UserVideosMVS, \
-    SaveContactCountListAPiView, SaveContactCountRetrieveAPIView, SaveContactCountCreateAPIView
+    SaveContactCountListAPiView, SaveContactCountRetrieveAPIView, SaveContactCountCreateAPIView, UserAvatarStatus
 
 from .views import SendMailAPIView, SendMailUserApiView
 
@@ -29,6 +29,10 @@ useSingle3 = {
     'delete': 'destroy'
 }
 
+useSingle4 = {
+    'patch': 'update',
+}
+
 urlpatterns = [
     path('', UserMVS.as_view(userPlural)),
     path('avatar/', UpdateUserAvatarView.as_view()),
@@ -37,7 +41,7 @@ urlpatterns = [
     path('image/<int:pk>/', UserImageMVS.as_view(useSingle3)),
     path('videos/<uuid:uniqueId>/', UserVideosMVS.as_view(useSingle2)),
     path('video/<int:pk>/', UserVideoMVS.as_view(useSingle3)),
-    path('update/<int:pk>/', UpdateUserAvatarView.as_view()),
+    path('update/<uuid:uniqueId>/', UserAvatarStatus.as_view()),
 
     path('login/', UserLoginView.as_view()),
     path('check/', CustomTokenRefreshView.as_view()),

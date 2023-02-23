@@ -23,7 +23,7 @@ from users.models import User, UserImage, UserVideo, SaveContactCount
 from users.serializers import (
     UserSerializer, UserCRUDSerializer, CustomTokenRefreshSerializer, UserImagesCRUDSerializer, UserVideoCRUDSerializer,
     UserImageSerializer, SendMessageSerializer,
-    UserVideoSerializer, UserAvatarFlipSerializer
+    UserVideoSerializer, UserAvatarFlipSerializer, UserAvatar
 )
 from utils.cropImage import cropImage
 from utils.imgToBase64 import b64_image
@@ -347,16 +347,16 @@ class SaveContactCountCreateAPIView(generics.CreateAPIView):
         return order
 
 # added
-# class UserAvatarStatus(viewsets.ModelViewSet):
-#     queryset = User.objects.all();
-#     permission_classes = [permissions.IsAuthenticated]
-#     lookup_field = 'avatarHidden'
+class UserAvatarStatus(generics.RetrieveAPIView):
+    queryset = User.objects.all();
+    permission_classes = [permissions.IsAuthenticated]
+    lookup_field = 'uniqueId'
 
-#     def patch(self, request):
-#         user = request.user;
-#         image = cropImage(request);
-#         serializer = UserCRUDSerializer(user, data={"avatar": image}, partial=True)
-#         serializer.is_valid(raise_exception=True);
-#         serializer.save();
-#         userSerializer = UserSerializer(serializer.instance, context={'request': request});
-#         return Response(userSerializer.data);
+    def patch(self, request, *args, **kwargs):
+        user = self.queryset.get(uniqueId=kwargs[self.lookup_field]);
+
+        image = request.data['avatarHidden'];
+        serializer = UserAvatar(user, data={"avatarHidden": image})
+        serializer.is_valid(raise_exception=True);
+        serializer.save();
+        return Response(serializer.data);

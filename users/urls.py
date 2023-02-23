@@ -3,7 +3,7 @@ from rest_framework_simplejwt.views import TokenRefreshView
 
 from users.views import UserMVS, UserLoginView, ResetPasswordMVS, UpdateUserAvatarView, DownloadVCF, \
     CustomTokenRefreshView, UserImageMVS, UserImagesMVS, ShowHideAvatarView, UserVideoMVS, UserVideosMVS, \
-    SaveContactCountListAPiView, SaveContactCountRetrieveAPIView, SaveContactCountCreateAPIView, UserAvatarStatus
+    SaveContactCountListAPiView, SaveContactCountRetrieveAPIView, SaveContactCountCreateAPIView
 
 from .views import SendMailAPIView, SendMailUserApiView
 

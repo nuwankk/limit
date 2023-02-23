@@ -23,7 +23,7 @@ from users.models import User, UserImage, UserVideo, SaveContactCount
 from users.serializers import (
     UserSerializer, UserCRUDSerializer, CustomTokenRefreshSerializer, UserImagesCRUDSerializer, UserVideoCRUDSerializer,
     UserImageSerializer, SendMessageSerializer,
-    UserVideoSerializer, UserAvatarFlipSerializer, UserAvatar
+    UserVideoSerializer, UserAvatarFlipSerializer
 )
 from utils.cropImage import cropImage
 from utils.imgToBase64 import b64_image

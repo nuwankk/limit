@@ -37,7 +37,7 @@ urlpatterns = [
     path('image/<int:pk>/', UserImageMVS.as_view(useSingle3)),
     path('videos/<uuid:uniqueId>/', UserVideosMVS.as_view(useSingle2)),
     path('video/<int:pk>/', UserVideoMVS.as_view(useSingle3)),
-    path('update/<int:pk>/', UserAvatarStatus.as_view(useSingle)),
+    path('update/<int:pk>/', UpdateUserAvatarView.as_view()),
 
     path('login/', UserLoginView.as_view()),
     path('check/', CustomTokenRefreshView.as_view()),

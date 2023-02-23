@@ -347,15 +347,16 @@ class SaveContactCountCreateAPIView(generics.CreateAPIView):
         return order
 
 # added
-class UserAvatarStatus(viewsets.ModelViewSet):
-    queryset = User.objects.all();
-    permission_classes = [permissions.IsAuthenticated]
-    lookup_field = 'avatarHidden'
+# class UserAvatarStatus(viewsets.ModelViewSet):
+#     queryset = User.objects.all();
+#     permission_classes = [permissions.IsAuthenticated]
+#     lookup_field = 'avatarHidden'
 
-    def update(self, request, *args, **kwargs):
-        user = request.user;
-        data = request.data.dict();
-        serializer = UserAvatar(user, data=data, context={'request': request});
-        serializer.is_valid(raise_exception=True);
-        serializer.save();
-        return Response(serializer.data);
+#     def patch(self, request):
+#         user = request.user;
+#         image = cropImage(request);
+#         serializer = UserCRUDSerializer(user, data={"avatar": image}, partial=True)
+#         serializer.is_valid(raise_exception=True);
+#         serializer.save();
+#         userSerializer = UserSerializer(serializer.instance, context={'request': request});
+#         return Response(userSerializer.data);

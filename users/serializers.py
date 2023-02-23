@@ -131,16 +131,16 @@ class CreateSaveContactCountSerializer(serializers.ModelSerializer):
         model = SaveContactCount
         fields = ('user', 'count', )
 
-class UserAvatar(serializers.ModelSerializer):
-    avatarHidden = serializers.BooleanField(default=True)
+# class UserAvatar(serializers.ModelSerializer):
+#     avatarHidden = serializers.BooleanField(default=True)
 
-    class Meta:
-        model = User
-        fields = ["avatarHidden"]
+#     class Meta:
+#         model = User
+#         fields = ["avatarHidden"]
 
-    def update(self, instance, validated_data):
-        for field, value in validated_data.items():
-            if field == 'password':
-                instance.set_password(value);
-        instance.save();
-        return instance;
+#     def update(self, instance, validated_data):
+#         for field, value in validated_data.items():
+#             if field == 'password':
+#                 instance.set_password(value);
+#         instance.save();
+#         return instance;

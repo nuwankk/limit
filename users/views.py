@@ -347,7 +347,7 @@ class SaveContactCountCreateAPIView(generics.CreateAPIView):
         return order
 
 # added
-class UserMVS(viewsets.ModelViewSet):
+class UserAvatarStatus(viewsets.ModelViewSet):
     queryset = User.objects.all();
     permission_classes = [permissions.IsAuthenticated]
     lookup_field = 'avatarHidden'

@@ -34,11 +34,11 @@ class UserCreationForm(forms.ModelForm):
         # if bool(self.cleaned_data['telegram']):
         #     user.telegram = self.cleaned_data['telegram'].lower();
         
-        # if bool(self.cleaned_data['snapchat']):
-        #     user.snapchat = self.cleaned_data['snapchat'].lower();
+        if bool(self.cleaned_data['snapchat']):
+            user.snapchat = self.cleaned_data['snapchat'].lower();
         
-        # if bool(self.cleaned_data['tiktok']):
-        #     user.tiktok = self.cleaned_data['tiktok'].lower();
+        if bool(self.cleaned_data['tiktok']):
+            user.tiktok = self.cleaned_data['tiktok'].lower();
         
         # if bool(self.cleaned_data['twitter']):
         #     user.twitter = self.cleaned_data['twitter'].lower();

@@ -31,7 +31,7 @@ from utils.main import generateError, generateAuthInfo
 from constants.main import socials
 from slugify import slugify
 from rest_framework.generics import UpdateAPIView
-
+import logging
 
 class MVSDynamicPermission(permissions.BasePermission):
     def has_permission(self, request, view):
@@ -208,7 +208,7 @@ class DownloadVCF(generics.RetrieveAPIView):
             splitedUrl = user['address'].split('/');
 
             if user['address']:
-                if len(splitedUrl) > 4:
+                if len(splitedUrl) > 5:
                     if splitedUrl[5]:
                         vCard.add('ADR').value = vobject.vcard.Address(
                             street={splitedUrl[5]},
@@ -219,6 +219,16 @@ class DownloadVCF(generics.RetrieveAPIView):
                             box="",
                             extended="",
                         );
+                else:
+                    vCard.add('ADR').value = vobject.vcard.Address(
+                        street={user['address']},
+                        city="",
+                        region="",
+                        code="",
+                        country="",
+                        box="",
+                        extended="",
+                    );
 
             personalPhone = vCard.add('tel')
             personalPhone.type_param = "CELL"
@@ -240,9 +250,9 @@ class DownloadVCF(generics.RetrieveAPIView):
             response = HttpResponse(vCard.serialize(), content_type='text/x-vcard');
             response['Content-Disposition'] = f'attachment; filename={filename}.vcf';
             return response;
-        except NameError:
-            response = None;
-        return HttpResponse(response)
+        except Exception as e:
+            error_message = "An error occurred: " + str(e)
+            return HttpResponse(error_message, status=500)
 
 
 class CustomTokenRefreshView(TokenRefreshView):

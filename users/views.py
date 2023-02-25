@@ -203,16 +203,21 @@ class DownloadVCF(generics.RetrieveAPIView):
             if base64['success']:
                 photo = vCard.add(f'PHOTO;ENCODING=b;TYPE=image/{base64["extension"]}')
                 photo.value = base64['base64'];
+        
+        splitedUrl = user['address'].split('/');
+
         if user['address']:
-            vCard.add('ADR').value = vobject.vcard.Address(
-                street={user['address']},
-                city="",
-                region="",
-                code="",
-                country="",
-                box="",
-                extended="",
-            );
+            if splitedUrl:
+                if splitedUrl[5]:
+                    vCard.add('ADR').value = vobject.vcard.Address(
+                        street={splitedUrl[5]},
+                        city="",
+                        region="",
+                        code="",
+                        country="",
+                        box="",
+                        extended="",
+                    );
 
         personalPhone = vCard.add('tel')
         personalPhone.type_param = "CELL"

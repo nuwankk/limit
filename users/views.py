@@ -208,7 +208,7 @@ class DownloadVCF(generics.RetrieveAPIView):
             splitedUrl = user['address'].split('/');
 
             if user['address']:
-                if splitedUrl:
+                if len(splitedUrl) > 4:
                     if splitedUrl[5]:
                         vCard.add('ADR').value = vobject.vcard.Address(
                             street={splitedUrl[5]},
@@ -240,7 +240,7 @@ class DownloadVCF(generics.RetrieveAPIView):
             response = HttpResponse(vCard.serialize(), content_type='text/x-vcard');
             response['Content-Disposition'] = f'attachment; filename={filename}.vcf';
             return response;
-        except IndexError:
+        except NameError:
             response = None;
         return HttpResponse(response)
 
@@ -375,3 +375,9 @@ class UserImageLink(generics.RetrieveAPIView):
     permission_classes = [permissions.IsAuthenticated]
     lookup_field = 'uniqueId'
     serializer_class = UserImageLink
+
+    def retrieve(self, request, *args, **kwargs):
+        user = self.queryset.get(uniqueId=kwargs[self.lookup_field]);
+        user2 = self.serializer_class(user).data;
+
+        return Response({"user_image" : user2['avatar'], "id": user2['id']});

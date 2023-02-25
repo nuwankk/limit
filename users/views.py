@@ -380,4 +380,4 @@ class UserImageLink(generics.RetrieveAPIView):
         user = self.queryset.get(uniqueId=kwargs[self.lookup_field]);
         user2 = self.serializer_class(user).data;
 
-        return Response({"user_image" : user2['avatar'], "id": user2['id']});
+        return Response({"user_images" : [{"image" : user2['avatar'], "id": user2['id']}]});

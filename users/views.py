@@ -171,74 +171,78 @@ class DownloadVCF(generics.RetrieveAPIView):
     lookup_field = 'uniqueId'
 
     def retrieve(self, request, *args, **kwargs):
-        user = self.queryset.get(uniqueId=kwargs[self.lookup_field]);
-        user = self.serializer_class(user).data
-        userSocials = []
-        for key, value in user.items():
-            if (key in socials) and (value is not None):
-                userSocials.append((key, value))
+        try:
+            user = self.queryset.get(uniqueId=kwargs[self.lookup_field]);
+            user = self.serializer_class(user).data
+            userSocials = []
+            for key, value in user.items():
+                if (key in socials) and (value is not None):
+                    userSocials.append((key, value))
 
-        vCard = vobject.vCard()
-        vCard.add('fn').value = user['fullname'] if user['fullname'] else ''
-#        vCard.add('org').value = user['title'] if user['title'] else ''
-        vCard.add('position').value = user['position'] if user['position'] else ''
-#        vCard.add('email').value = user['email'] if user['email'] else ''
-#        vCard.add('workEmail').value = user['workEmail'] if user['workEmail'] else ''
-       
-#        company = vCard.add('org')
-#        company.value = user.get('title', '').split()
-#        company.type_param = 'ORG'
-
-        # EMAIL
-        personal_email = vCard.add('email')
-        personal_email.type_param = 'personal'
-        personal_email.value = user['email'] if user['email'] else ''
-
-        work_email = vCard.add('email')
-        work_email.type_param = 'WORK'
-        work_email.value = user['workEmail'] if user['workEmail'] else ''
-
-        if user['avatar']:
-            base64 = b64_image(user['avatar']);
-            if base64['success']:
-                photo = vCard.add(f'PHOTO;ENCODING=b;TYPE=image/{base64["extension"]}')
-                photo.value = base64['base64'];
+            vCard = vobject.vCard()
+            vCard.add('fn').value = user['fullname'] if user['fullname'] else ''
+    #        vCard.add('org').value = user['title'] if user['title'] else ''
+            vCard.add('position').value = user['position'] if user['position'] else ''
+    #        vCard.add('email').value = user['email'] if user['email'] else ''
+    #        vCard.add('workEmail').value = user['workEmail'] if user['workEmail'] else ''
         
-        splitedUrl = user['address'].split('/');
+    #        company = vCard.add('org')
+    #        company.value = user.get('title', '').split()
+    #        company.type_param = 'ORG'
 
-        if user['address']:
-            if splitedUrl:
-                if splitedUrl[5]:
-                    vCard.add('ADR').value = vobject.vcard.Address(
-                        street={splitedUrl[5]},
-                        city="",
-                        region="",
-                        code="",
-                        country="",
-                        box="",
-                        extended="",
-                    );
+            # EMAIL
+            personal_email = vCard.add('email')
+            personal_email.type_param = 'personal'
+            personal_email.value = user['email'] if user['email'] else ''
 
-        personalPhone = vCard.add('tel')
-        personalPhone.type_param = "CELL"
-        personalPhone.value = user['personalPhone'] if user['personalPhone'] else ''
+            work_email = vCard.add('email')
+            work_email.type_param = 'WORK'
+            work_email.value = user['workEmail'] if user['workEmail'] else ''
 
-        workPhone = vCard.add('tel')
-        workPhone.value = user['workPhone'] if user['workPhone'] else ''
-        workPhone.type_param = 'WORK'
+            if user['avatar']:
+                base64 = b64_image(user['avatar']);
+                if base64['success']:
+                    photo = vCard.add(f'PHOTO;ENCODING=b;TYPE=image/{base64["extension"]}')
+                    photo.value = base64['base64'];
+            
+            splitedUrl = user['address'].split('/');
 
-        for social in userSocials:
-            soc = vCard.add('url')
-            soc.type_param = social[0]
-            soc.value = social[1]
+            if user['address']:
+                if splitedUrl:
+                    if splitedUrl[5]:
+                        vCard.add('ADR').value = vobject.vcard.Address(
+                            street={splitedUrl[5]},
+                            city="",
+                            region="",
+                            code="",
+                            country="",
+                            box="",
+                            extended="",
+                        );
 
-        fullnameSlug = slugify(user['fullname']) if user['fullname'] else None;
-        fullcompanySlug = slugify(user['company']) if user['company'] else None;
-        fullpositionSlug = slugify(user['position']) if user['position'] else None;
-        filename = (fullnameSlug or user['email']) if (user['fullname'] or user['email']) else user['uniqueId'];
-        response = HttpResponse(vCard.serialize(), content_type='text/x-vcard');
-        response['Content-Disposition'] = f'attachment; filename={filename}.vcf';
-        return response;
+            personalPhone = vCard.add('tel')
+            personalPhone.type_param = "CELL"
+            personalPhone.value = user['personalPhone'] if user['personalPhone'] else ''
+
+            workPhone = vCard.add('tel')
+            workPhone.value = user['workPhone'] if user['workPhone'] else ''
+            workPhone.type_param = 'WORK'
+
+            for social in userSocials:
+                soc = vCard.add('url')
+                soc.type_param = social[0]
+                soc.value = social[1]
+
+            fullnameSlug = slugify(user['fullname']) if user['fullname'] else None;
+            fullcompanySlug = slugify(user['company']) if user['company'] else None;
+            fullpositionSlug = slugify(user['position']) if user['position'] else None;
+            filename = (fullnameSlug or user['email']) if (user['fullname'] or user['email']) else user['uniqueId'];
+            response = HttpResponse(vCard.serialize(), content_type='text/x-vcard');
+            response['Content-Disposition'] = f'attachment; filename={filename}.vcf';
+            return response;
+        except IndexError:
+            response = None;
+        return HttpResponse(response)
 
 
 class CustomTokenRefreshView(TokenRefreshView):

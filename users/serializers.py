@@ -137,3 +137,10 @@ class UserAvatar(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'uniqueId', "avatarHidden"]
+
+class UserImageLink(serializers.ModelSerializer):
+    avatar = serializers.ImageField()
+
+    class Meta:
+        model = User
+        fields = ['id', 'uniqueId', "avatar"]

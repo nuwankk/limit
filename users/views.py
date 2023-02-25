@@ -23,7 +23,7 @@ from users.models import User, UserImage, UserVideo, SaveContactCount
 from users.serializers import (
     UserSerializer, UserCRUDSerializer, CustomTokenRefreshSerializer, UserImagesCRUDSerializer, UserVideoCRUDSerializer,
     UserImageSerializer, SendMessageSerializer,
-    UserVideoSerializer, UserAvatarFlipSerializer, UserAvatar
+    UserVideoSerializer, UserAvatarFlipSerializer, UserAvatar, UserImageLink
 )
 from utils.cropImage import cropImage
 from utils.imgToBase64 import b64_image
@@ -365,3 +365,9 @@ class UserAvatarStatus(generics.RetrieveAPIView):
         serializer.is_valid(raise_exception=True);
         serializer.save();
         return Response(serializer.data);
+
+class UserImageLink(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    permission_classes = [permissions.IsAuthenticated]
+    lookup_field = 'uniqueId'
+    serializer_class = UserImageLink

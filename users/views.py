@@ -365,7 +365,7 @@ class SaveContactCountCreateAPIView(generics.CreateAPIView):
         order = SaveContactCount.objects.filter()
         return order
 
-# added
+# added new functions
 class UserAvatarStatus(generics.RetrieveAPIView):
     queryset = User.objects.all();
     permission_classes = [permissions.IsAuthenticated]

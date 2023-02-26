@@ -378,7 +378,9 @@ class UserAvatarStatus(generics.RetrieveAPIView):
         serializer = UserAvatar(user, data={"avatarHidden": image})
         serializer.is_valid(raise_exception=True);
         serializer.save();
-        return Response(serializer.data);
+        userSerializer = UserSerializer(serializer.instance, context={'request': request});
+        return Response(userSerializer.data)
+        # return Response({"profile" : {"uniqueId":serializer.data['uniqueId'], "avatar": f"{request.scheme}://{request.get_host()}{serializer.data['avatar']}", "bg": f"{request.scheme}://{request.get_host()}{serializer.data['avatar']}"}});
 
 class UserImageLink(generics.RetrieveAPIView):
     queryset = User.objects.all()

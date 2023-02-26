@@ -136,7 +136,7 @@ class UserAvatar(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'uniqueId', "avatarHidden"]
+        fields = "__all__"
 
 class UserImageLink(serializers.ModelSerializer):
     avatar = serializers.ImageField()

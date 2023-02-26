@@ -40,7 +40,7 @@ urlpatterns = [
     path('avatar/', UpdateUserAvatarView.as_view()),
     path('<uuid:uniqueId>/', UserMVS.as_view(useSingle)),
     path('images/<uuid:uniqueId>/', UserImagesMVS.as_view(useSingle2)),
-    path('image/<uuid:uniqueId>/', UserImageLink.as_view()),
+    path('image/<int:pk>/', UserImageMVS.as_view(useSingle3)),
     path('videos/<uuid:uniqueId>/', UserVideosMVS.as_view(useSingle2)),
     path('video/<int:pk>/', UserVideoMVS.as_view(useSingle3)),
     path('update/<uuid:uniqueId>/', UserAvatarStatus.as_view()),

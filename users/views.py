@@ -72,14 +72,17 @@ class UpdateUserAvatarView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def patch(self, request):
-        user = request.user;
-        image = cropImage(request);
-        serializer = UserCRUDSerializer(user, data={"avatar": image}, partial=True)
-        serializer.is_valid(raise_exception=True);
-        serializer.save();
-        userSerializer = UserSerializer(serializer.instance, context={'request': request});
-        return Response(userSerializer.data);
-
+        try:
+            user = request.user;
+            image = cropImage(request);
+            serializer = UserCRUDSerializer(user, data={"avatar": image}, partial=True)
+            serializer.is_valid(raise_exception=True);
+            serializer.save();
+            userSerializer = UserSerializer(serializer.instance, context={'request': request});
+            return Response(userSerializer.data);
+        except Exception as e:
+            error_message = "An error occurred: " + str(e)
+            return HttpResponse(error_message, status=500)
 
 class UserLoginView(generics.CreateAPIView):
     queryset = User.objects.all();

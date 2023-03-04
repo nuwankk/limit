@@ -1,3 +1,4 @@
+from formatter import NullFormatter
 from django.core.mail import BadHeaderError, send_mail
 import uuid
 import vobject
@@ -32,6 +33,7 @@ from constants.main import socials
 from slugify import slugify
 from rest_framework.generics import UpdateAPIView
 import logging
+import os
 
 class MVSDynamicPermission(permissions.BasePermission):
     def has_permission(self, request, view):
@@ -396,3 +398,47 @@ class UserImageLink(generics.RetrieveAPIView):
         user2 = self.serializer_class(user).data;
 
         return Response({"user_images" : [{"image" : user2['avatar'], "id": user2['id']}]});
+
+
+class UserAvatarOrBackground(generics.RetrieveAPIView):
+    queryset = User.objects.all();
+    permission_classes = [permissions.IsAuthenticated]
+    lookup_field = 'uniqueId'
+
+    def patch(self, request, *args, **kwargs):
+        try:
+            user = self.queryset.get(uniqueId=kwargs[self.lookup_field]);
+            
+            if(request.data['type'] == 'av'):
+                avatarFile = request.data['avatar']; 
+                avatarSpliturl = os.path.split(avatarFile);
+                avatarFilePath = f'media/images/avatars/{avatarSpliturl[1]}';
+            
+                if(os.path.isfile(avatarFilePath)):
+                    os.remove(avatarFilePath)
+                    serializer = UserAvatar(user, data={"avatarHidden": False})
+                    serializer.is_valid(raise_exception=True);
+                    serializer.save();
+                    userSerializer = UserSerializer(serializer.instance, context={'request': request});
+                    return Response(userSerializer.data)
+            
+            if(request.data['type'] == 'bg'):
+                myfile = request.data['bg']; 
+                myspliturl = os.path.split(myfile);
+                filePath = f'media/images/backgrounds/{myspliturl[1]}';
+            
+                if(os.path.isfile(filePath)):
+                    os.remove(filePath)
+                    serializer = UserAvatar(user, data={"avatarHidden": True})
+                    serializer.is_valid(raise_exception=True);
+                    serializer.save();
+                    userSerializer = UserSerializer(serializer.instance, context={'request': request});
+                    return Response(userSerializer.data)
+                    
+            
+            
+            
+        except Exception as e:
+            error_message = "An error occurred: " + str(e)
+            return HttpResponse(error_message, status=500)
+            

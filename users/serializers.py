@@ -139,8 +139,6 @@ class UserAvatar(serializers.ModelSerializer):
         fields = "__all__"
 
 class UserImageLink(serializers.ModelSerializer):
-    avatar = serializers.ImageField()
-
     class Meta:
         model = User
-        fields = ['id', 'uniqueId', "avatar"]
+        fields = "__all__"

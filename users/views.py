@@ -210,9 +210,9 @@ class DownloadVCF(generics.RetrieveAPIView):
                     photo = vCard.add(f'PHOTO;ENCODING=b;TYPE=image/{base64["extension"]}')
                     photo.value = base64['base64'];
             
-            splitedUrl = user['address'].split('/');
-
             if user['address']:
+                splitedUrl = user['address'].split('/');
+                
                 if len(splitedUrl) > 5:
                     if splitedUrl[5]:
                         vCard.add('ADR').value = vobject.vcard.Address(
